@@ -3,15 +3,26 @@ class Calculador_impostos(object):
 
     def realiza_calculo(self, orcamento, imposto):
 
-        return imposto.calcula(orcamento)
-
+        valor = imposto.calcula(orcamento)
+        print(valor)
 
 
 if __name__ == '__main__':
     
-    from orcamento import Orcamento
+    from orcamento import Orcamento, Item
 
-    orcamento = Orcamento(500.0)
+    orcamento = Orcamento()
+    # adicionando itens ao orçamento
+    orcamento.adiciona_item(Item('ITEM 1', 50))
+    orcamento.adiciona_item(Item('ITEM 2', 200))
+    orcamento.adiciona_item(Item('ITEM 3', 250))
+    print("or:",orcamento.total_itens)
     calculador_impostos = Calculador_impostos()
-    print(calculador_impostos.realiza_calculo(orcamento, ICMS)) # imprimie 50.0
-    print(calculador_impostos.realiza_calculo(orcamento, ISS)) # imprime 30.0
+    print ('ISS e ICMS')
+    calculador_impostos.realiza_calculo(orcamento, ISS())
+    calculador_impostos.realiza_calculo(orcamento, ICMS())
+
+    # cálculo dos novos impostos
+    print ('ICPP e IKCV')
+    calculador_impostos.realiza_calculo(orcamento, ICPP()) # imprime 25.0
+    calculador_impostos.realiza_calculo(orcamento, IKCV()) # imprime 30.0
