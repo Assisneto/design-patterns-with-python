@@ -18,7 +18,7 @@ class Item(object):
 
 class Nota_fiscal(object):
     # os parâmetros opcionais devem ser os últimos
-    def __init__(self, razao_social, cnpj, itens, data_de_emissao=date.today(), detalhes=''):
+    def __init__(self, razao_social, cnpj, itens, data_de_emissao=date.today(), detalhes='', observadores =[]):
         self.__razao_social = razao_social
         self.__cnpj = cnpj
         self.__data_de_emissao = data_de_emissao
@@ -26,6 +26,9 @@ class Nota_fiscal(object):
             raise NameError('Detalhes da nota não pode ter mais do que 20 caracteres')
         self.__detalhes = detalhes
         self.__itens = itens
+
+        for observador in observadores:
+            observador(self)
 
     @property
     def razao_social(self):
@@ -43,7 +46,7 @@ class Nota_fiscal(object):
     def detalhes(self):
         return self.__detalhes
 if __name__ == '__main__':
-    
+    from observadores import *
     itens=[
         Item(
             descricao='ITEM A',
@@ -58,5 +61,6 @@ if __name__ == '__main__':
     nota_fiscal = Nota_fiscal(
         cnpj='012345678901234',
         razao_social='FHSA Limitada',
-        itens=itens
+        itens=itens,
+        observadores= [envia_por_email,imprime,salva_no_banco,]
     )
